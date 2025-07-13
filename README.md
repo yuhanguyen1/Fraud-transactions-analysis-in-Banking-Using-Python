@@ -55,29 +55,109 @@ This project aims to:
 
 ---
 
-## III. ⚙️ Main Process
+## III. Main Process
 
-### 🧹 Data Preprocessing
+### 🧹 1. Data Preprocessing
 
-- Dropped irrelevant columns (`Unnamed: 0`, `cc_num`, `street`, etc.)
-- Converted date fields (`trans_date_trans_time`, `dob`) to datetime
-- Checked missing values and duplicates (none significant)
-- Transformed time to hour (`trans_hour`)
-- Calculated user `age` from `dob`
-
-### 🛠 Feature Engineering
-
-- Encoded categorical variables: `category`, `gender`, `job`
-- Removed highly granular or sensitive features (e.g., coordinates)
-- Final dataset ready for model training
-
-```python
-df_encoded = pd.get_dummies(data, columns = ['category','gender','job'], drop_first=True)
-```
+##### 📌 Objective:
+Prepare and transform the raw transaction data into a clean, structured format suitable for Machine Learning modeling.
 
 ---
 
-### 🤖 Model Building
+#### 🔻 Drop Irrelevant Columns
+
+```python
+exclude_cols = ['trans_date_trans_time', 'cc_num','first','last','dob','trans_num','unix_time',
+               'long','lat','merch_lat','merch_long','street','city','state','zip','city_pop']
+data.drop(columns = exclude_cols, inplace=True)
+```
+
+> ✅ These columns either contain personal identifiable information (PII), or are irrelevant for fraud detection modeling (e.g., `street`, `cc_num`, `first name`). Dropping them helps reduce noise and dimensionality.
+
+---
+
+#### 📆 Convert Date Columns to Datetime Format
+
+```python
+data['trans_date_trans_time'] = pd.to_datetime(data['trans_date_trans_time'])
+data['dob'] = pd.to_datetime(data['dob'])
+```
+
+> ✅ Converting to `datetime` format allows feature engineering like extracting transaction hour and computing user age.
+
+---
+
+#### 🔍 Missing Value Check
+
+```python
+missing_dict = {'volume': data.isnull().sum(), 
+                'missing_percentage': data.isnull().sum()/data.shape[0]*100}
+missing_df = pd.DataFrame(missing_dict)
+```
+
+> ✅ Verifies data completeness. The dataset had no critical missing values, so no imputation or row dropping was required.
+
+---
+
+#### 🔁 Duplicate Check
+
+```python
+duplicate_count = data.duplicated().sum()
+print(f'There are {duplicate_count} duplicate values')
+```
+
+> ✅ Ensures data integrity by checking for repeated records. No significant duplicates were found.
+
+---
+
+#### ⏰ Create Transaction Hour Feature
+
+```python
+data['trans_hour'] = data['trans_date_trans_time'].dt.hour
+```
+
+> ✅ Hour of transaction can be a strong fraud indicator (e.g., fraudulent transactions often occur at unusual hours).
+
+---
+
+#### 🎂 Calculate Customer Age
+
+```python
+data['age'] = (data['trans_date_trans_time'] - data['dob']).dt.days / 365
+data['age'] = round(data['age'])
+```
+
+> ✅ Age can influence transaction behavior and fraud patterns. Older vs. younger users may exhibit different risk profiles.
+
+---
+
+#### 🧪 Feature Selection
+
+```python
+# Already handled above with drop()
+```
+
+> ✅ Final dataset now only includes relevant engineered and encoded features for modeling.
+
+---
+
+#### 🧬 One-Hot Encoding Categorical Variables
+
+```python
+list_column = ['category','gender','job']
+df_encoded = pd.get_dummies(data, columns = list_column, drop_first=True)
+df_encoded.head(2)
+```
+
+> ✅ Converts categorical features into numerical format suitable for machine learning models. `drop_first=True` prevents multicollinearity.
+
+---
+
+> 🎯 **Result**: The cleaned and transformed dataset is now ready for normalization and model training, with well-engineered features like `trans_hour`, `age`, and encoded demographic/transaction variables.
+
+---
+
+### 🤖 2. Model Building
 
 #### 📊 Data Split
 ```python
