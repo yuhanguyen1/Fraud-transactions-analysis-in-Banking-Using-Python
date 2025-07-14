@@ -9,13 +9,13 @@
 ---
 
 ## 📚 Table of Contents  
-[I. 🎯 Background & Overview]()
+[I. 🎯 Background & Overview](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#i--background--overview)
 
-[II. 📂 Data Description]() 
+[II. 📂 Data Description](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#ii--data-description) 
 
-[III. ⚒️ Main Process]()  
+[III. ⚒️ Main Process](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iii-%EF%B8%8F-main-process)  
 
-[IV. 🧾 Final Conclusion & Recommendations]()
+[IV. 🧾 Final Conclusion & Recommendations](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iv--final-conclusion--recommendations)
 
 ---
 
