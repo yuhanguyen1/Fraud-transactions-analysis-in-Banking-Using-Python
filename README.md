@@ -8,6 +8,17 @@
 
 ---
 
+## 📚 Table of Contents  
+[I. 🎯 Background & Overview]()
+
+[II. 📂 Data Description]() 
+
+[III. ⚒️ Main Process]()  
+
+[IV. 🧾 Final Conclusion & Recommendations]()
+
+---
+
 ## I. 🎯 Background & Overview
 
 📖 **What is this project about?**  
@@ -55,7 +66,7 @@ This project aims to:
 
 ---
 
-## III. Main Process
+## III. ⚒️ Main Process
 
 ### 🧹 1. Data Preprocessing
 
@@ -161,71 +172,124 @@ df_encoded.head(2)
 
 #### 📊 Data Split
 ```python
-X_train, X_val, X_test = 70% / 15% / 15%
+# Split train/test/validate set
+from sklearn.model_selection import train_test_split
+X = df_encoded.drop(columns='is_fraud', axis = 1)
+y = df_encoded['is_fraud']
+
+X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
+X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
+
+print(f"Number data of train set: {len(X_train)}")
+print(f"Number data of validate set: {len(X_val)}")
+print(f"Number data of test set: {len(X_test)}")
 ```
 
 #### 🔄 Normalization
 ```python
 from sklearn.preprocessing import MinMaxScaler
-scaler = MinMinMaxScaler()
+scaler = MinMaxScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_val_scaled = scaler.transform(X_val)
+X_test_scaled = scaler.transform(X_test)
 ```
 
 #### 📈 Logistic Regression
 ```python
 from sklearn.linear_model import LogisticRegression
-lr_model = LogisticRegression()
+
+lr_model = LogisticRegression(random_state=0)
 lr_model.fit(X_train_scaled, y_train)
+
+y_pred_val = lr_model.predict(X_val_scaled)
+y_pred_train = lr_model.predict(X_train_scaled)
 ```
 
 #### 🌲 Random Forest
 ```python
 from sklearn.ensemble import RandomForestClassifier
-rf_model = RandomForestClassifier(max_depth=15, n_estimators=100)
+
+rf_model = RandomForestClassifier(max_depth=15, random_state=0, n_estimators=100)
 rf_model.fit(X_train_scaled, y_train)
+
+y_rf_pred_val = rf_model.predict(X_val_scaled)
+y_rf_pred_train = rf_model.predict(X_train_scaled)
 ```
 
 ---
 
 ### 📏 Model Evaluation
 
-#### Logistic Regression:
-- Balanced Accuracy (Train): ~0.93  
-- Balanced Accuracy (Validation): ~0.88  
-- Performed reasonably but slightly underfit
+#### 🔹 Logistic Regression
 
-#### Random Forest:
-- Balanced Accuracy (Train): 1.0 (overfit risk)  
-- Balanced Accuracy (Validation): ~0.91  
-- Better at capturing fraud patterns
+**📌 Goal:**  
+Use Logistic Regression as a simple baseline model to evaluate its ability in detecting fraudulent transactions.
 
-#### 🛠 Hyperparameter Tuning:
+**📊 Results:**
+- **Balanced Accuracy (Train):** ~0.69  
+- **Balanced Accuracy (Validation):** ~0.69  
+
+**📝 Notes:**
+- The model shows consistent performance between training and validation sets, indicating **no overfitting**.
+- However, the overall accuracy is relatively low, suggesting the model lacks the capacity to capture complex, non-linear fraud patterns.
+- Suitable as a baseline, but insufficient for real-world fraud detection where accuracy is critical.
+
+---
+
+#### 🔹 Random Forest
+
+**📌 Goal:**  
+Apply Random Forest to capture more complex relationships in the data and improve fraud classification accuracy.
+
+**📊 Results:**
+- **Balanced Accuracy (Train):** ~0.76  
+- **Balanced Accuracy (Validation):** ~0.74  
+
+**📝 Notes:**
+- Performs noticeably better than Logistic Regression on both train and validation sets.
+- Slight drop in validation accuracy compared to training suggests **mild overfitting**, but still acceptable.
+- Provides a more powerful, generalizable model for fraud detection.
+
+---
+
+### 🔧 Hyperparameter Tuning (Grid Search)
+
+**📌 Objective:**  
+To fine-tune Random Forest performance using a **Grid Search** with 5-fold cross-validation.
+
+**📦 Parameter Grid:**
 ```python
-from sklearn.model_selection import GridSearchCV
-
 param_grid = {
     'n_estimators': [10, 100],
     'max_depth': [None, 15]
 }
 grid_search = GridSearchCV(rf_model, param_grid, cv=5, scoring='balanced_accuracy')
+grid_search.fit(X_train, y_train)
 ```
-- Best Parameters: `max_depth=15`, `n_estimators=100`
-- Final Accuracy (Test): ~0.93
+**✅ Best Parameters Found:** {'max_depth': none, 'n_estimators': 100}
+
+**🎯 Performance of Tuned Model on Test Set:**
+
++ Accuracy: ~0.99
+
++ R² Score: ~0.85
 
 ---
 
-## IV. 🧾 Final Conclusion & Recommendation
+## IV. 🧾 Final Conclusion & Recommendations
 
-### ✅ Key Takeaways
+### 🧠 Summary:
+- Two models were evaluated on the task of fraud transaction classification: **Logistic Regression** and **Random Forest**.
+- **Random Forest** demonstrated higher accuracy and better generalization compared to Logistic Regression.
 
-- **Random Forest** showed superior performance over Logistic Regression, especially after tuning.
-- **Feature Engineering** (e.g., `age`, `trans_hour`, encoded categories) played a critical role in model performance.
-- **Balanced Accuracy** was a suitable metric due to class imbalance in fraud detection.
+### 💡 Final Conclusions:
+- **Logistic Regression** is useful as a baseline but not recommended for deployment due to its lower performance.
+- **Random Forest** is the better choice for this dataset, offering higher balanced accuracy and stronger predictive capability.
+- The accuracy scores indicate that while the model is functional, further improvement is needed before deployment in a high-risk environment.
 
-### 🧠 Recommendations
-
-- Deploy the Random Forest model in batch or real-time fraud detection pipelines.
-- Implement threshold tuning or probability calibration for production.
-- Further improve with:
-  - **SMOTE or oversampling** techniques
-  - **SHAP values** for explainability
-  - **Anomaly detection** models for unsupervised fraud spotting
+### ✅ Recommendations:
+- **Use Random Forest** as the primary model for fraud classification in the current pipeline.
+- **Tune hyperparameters** further (e.g. number of estimators, max depth) and test additional models like **XGBoost** or **LightGBM** for improved performance.
+- **Investigate class imbalance** and consider techniques like **SMOTE** to further boost detection of rare fraud cases.
+- Continuously **retrain the model with fresh transaction data** to adapt to evolving fraud tactics.
+- Explore **feature importance** from the Random Forest model to understand key fraud signals and improve fraud prevention strategies.
