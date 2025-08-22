@@ -15,7 +15,9 @@
 
 [III. ⚒️ Main Process](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iii-%EF%B8%8F-main-process)  
 
-[IV. 🧾 Final Conclusion & Recommendations](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iv--final-conclusion--recommendations)
+[IV. 🔎 Key Insights from Analysis](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iv--final-conclusion--recommendations)
+
+[V. 💡 Business Impact & Recommendations](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iv--final-conclusion--recommendations)
 
 ---
 
@@ -276,20 +278,44 @@ grid_search.fit(X_train, y_train)
 
 ---
 
-## IV. 🧾 Final Conclusion & Recommendations
+## IV. 🔎 Key Insights from Analysis  
 
-### 🧠 Summary:
-- Two models were evaluated on the task of fraud transaction classification: **Logistic Regression** and **Random Forest**.
-- **Random Forest** demonstrated higher accuracy and better generalization compared to Logistic Regression.
+### 1. Customer & Transaction Behaviors  
+- **Unusual Transaction Hours:** Fraudulent transactions were disproportionately made during late-night or unusual hours.  
+- **High-Value Transactions:** Large transaction amounts were more likely to be fraudulent compared to everyday purchases.  
+- **Demographic Patterns:** Younger customers had slightly higher fraud exposure, possibly due to digital adoption without strict security practices.  
 
-### 💡 Final Conclusions:
-- **Logistic Regression** is useful as a baseline but not recommended for deployment due to its lower performance.
-- **Random Forest** is the better choice for this dataset, offering higher balanced accuracy and stronger predictive capability.
-- The accuracy scores indicate that while the model is functional, further improvement is needed before deployment in a high-risk environment.
+### 2. Model Performance (Simplified View)  
+- **Logistic Regression:** Provided a useful baseline, but too simplistic for real-world fraud detection.  
+- **Random Forest:** Outperformed Logistic Regression, capturing complex fraud patterns with higher accuracy and stronger generalization.  
+- **Tuned Model:** Achieved ~99% test accuracy, highlighting strong predictive power, though real deployment would require further validation.  
 
-### ✅ Recommendations:
-- **Use Random Forest** as the primary model for fraud classification in the current pipeline.
-- **Tune hyperparameters** further (e.g. number of estimators, max depth) and test additional models like **XGBoost** or **LightGBM** for improved performance.
-- **Investigate class imbalance** and consider techniques like **SMOTE** to further boost detection of rare fraud cases.
-- Continuously **retrain the model with fresh transaction data** to adapt to evolving fraud tactics.
-- Explore **feature importance** from the Random Forest model to understand key fraud signals and improve fraud prevention strategies.
+### 3. Signals of Fraudulent Behavior  
+- Transaction timing (odd hours)  
+- Unusually high amounts  
+- Certain merchant categories showing repeated fraud attempts  
+
+---
+
+## V. 💡 Business Impact & Recommendations  
+
+### ✅ Business Outcomes  
+- **Reduced Losses:** By prioritizing high-risk transactions for review, banks can significantly cut down financial losses.  
+- **Improved Trust:** Customers feel more secure when fraud detection is proactive and accurate.  
+- **Operational Efficiency:** Machine learning reduces dependency on manual rule-setting, freeing fraud teams to focus on complex cases.  
+
+### 📌 Recommendations  
+1. **Adopt Random Forest (or similar tree-based models)** as the core fraud detection engine for current pipelines.  
+2. **Continuously retrain models** with new transaction data to adapt to evolving fraud tactics.  
+3. **Leverage feature importance** to refine fraud prevention policies (e.g., stricter checks for high-value, late-night transactions).  
+4. **Address class imbalance** using techniques like SMOTE or anomaly detection to improve rare fraud case detection.  
+5. **Expand model testing** with XGBoost, LightGBM, or neural networks for further performance gains.  
+6. **Integrate alerts into real-time monitoring systems** to block or flag suspicious transactions instantly.  
+
+---
+
+## 🏆 Final Takeaway  
+
+This project demonstrates that **data-driven fraud detection using machine learning can significantly outperform traditional approaches**. By focusing on transaction patterns and leveraging advanced models, financial institutions can **stay ahead of fraudsters, protect customers, and safeguard revenues**.  
+
+---
