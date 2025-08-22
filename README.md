@@ -15,9 +15,9 @@
 
 [III. ⚒️ Main Process](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iii-%EF%B8%8F-main-process)  
 
-[IV. 🔎 Key Insights from Analysis](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iv--final-conclusion--recommendations)
+[IV. 🔎 Key Insights from Analysis](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iv--key-insights-from-analysis)
 
-[V. 💡 Business Impact & Recommendations](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#iv--final-conclusion--recommendations)
+[V. 💡 Business Impact & Recommendations](https://github.com/yuhanguyen1/Fraud-transactions-analysis-in-Banking-Using-Python?tab=readme-ov-file#v--business-impact--recommendations)
 
 ---
 
